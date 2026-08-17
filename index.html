@@ -735,7 +735,7 @@ function renderEmployeeView(){
       <td>${statusBadge(r.status)}</td>
       <td style="color:var(--text-muted); font-size:12.5px;">${r.location_note || '—'}</td>
       <td style="color:var(--text-muted); font-size:12.5px;">${r.decision_note || r.note || '—'}</td>
-      <td>${r.status==='beklemede' ? `<button class="btn btn-ghost btn-sm" onclick="cancelRequest('${r.id}')">İptal</button>` : ''}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="cancelRequest('${r.id}')">Sil</button></td>
     </tr>
   `).join('');
 }
@@ -795,10 +795,10 @@ async function submitRequest(){
   await refreshAll();
 }
 async function cancelRequest(id){
-  if(!confirm('Bu talebi iptal etmek istiyor musunuz?')) return;
+  if(!confirm('Bu izin talebini kalıcı olarak silmek istiyor musunuz? Bu işlem geri alınamaz.')) return;
   const { error } = await sbClient.from('izin_leave_requests').delete().eq('id', id);
   if(error){ toast('Hata: ' + error.message); return; }
-  toast('Talep iptal edildi.');
+  toast('Talep silindi.');
   await refreshAll();
 }
 
